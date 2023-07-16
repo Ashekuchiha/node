@@ -1,0 +1,17 @@
+npm i package_name
+
+node file.js
+
+window==global
+
+_dirname=path of curent folder
+_filename=path of curent folder with file name
+
+moduel = every singel js file called moduel
+
+module.export= {};
+require("path");=it use for conecting two moduel
+
+core module ->path ,os,fs,events
+module
+
