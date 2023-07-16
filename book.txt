@@ -15,3 +15,9 @@ require("path");=it use for conecting two moduel
 core module ->path ,os,fs,events
 module
 
+creat stram:
+const fs=require("fs");
+const stream=fs.createReadStream(`${__dirname}/fileName.txt`);
+stram.on("eventName",(chunk)=>{
+    console.log(chunk);
+})
