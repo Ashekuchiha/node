@@ -5,19 +5,18 @@ const server = http.createServer((req,res)=>{
         res.write(`
         <html>
         <head>
-        <titel>subb</titel>
+        <title>subb</title>
         </head>
         <body>
-        <form method="post" action="sub">
-        <input name ="sub"/>
+        <form method="post" action="/sub">
+        <input name ="message"/>
         </form>
         </body>
-        </html>
         `);
         res.end();
-    }else if(req.url=== '/sub' && req.method === 'post'){
+    }else if(req.url=== '/sub'){
         req.on('data',(chunk)=>{
-            console.log(chunk);
+            console.log(chunk.toString());
         });
         res.write('submited');
         res.end();

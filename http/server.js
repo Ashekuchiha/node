@@ -1,20 +1,19 @@
-const HTTP = require('http');
+const http = require('http');
 
-const SERVER = HTTP.createServer((req,res)=>{
-    if(req='/'){
-        res.write(`hi programmers`);
-        res.write(`welcome my server`);
+const server = http.createServer((req, res) => {
+    if (req.url === '/') {
+        res.write('Hello programmers!');
+        res.write('How are you doing?');
         res.end();
-    }else if(req='/about'){
-        res.write(`its all about us`);
+    } else if (req.url === '/about') {
+        res.write('This is about us page');
         res.end();
-    }else{
-        res.write(`not found`);
+    } else {
+        res.write('Not found');
         res.end();
     }
-
 });
 
-SERVER.listen(3000);
+server.listen(3000);
 
-console.log(`port 3000 listing`);
+console.log('listening on port 3000');
