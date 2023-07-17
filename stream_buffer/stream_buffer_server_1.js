@@ -1,3 +1,6 @@
+
+//file read koray console e output dekhno
+
 //creat a stream 
 const file=require("fs");
 

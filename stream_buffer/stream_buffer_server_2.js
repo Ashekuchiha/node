@@ -1,3 +1,6 @@
+
+//windows thika read kory console e dekhano
+
 const http = require('http');
 
 const server = http.createServer((req,res)=>{

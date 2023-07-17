@@ -1,3 +1,6 @@
+
+//window thika read kory buffer system e console e dekhano
+
 const http = require('http');
 
 const server = http.createServer((req,res)=>{

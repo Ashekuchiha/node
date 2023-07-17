@@ -4,7 +4,6 @@
 
  var path = require('path');//core module
  var os = require('os');
- var fs = require('fs');
 const { EventEmitter } = require("stream");
 
  const mypath = "C:/Users/shakil/Desktop/web/node js/book.txt";
@@ -16,11 +15,19 @@ const { EventEmitter } = require("stream");
 //console.log(os.platform());
 //console.log(os.freemem());
 //console.log(os.cpus());
-//fs.writeFileSync('file1.txt','hi my name is ashak');
-//fs.appendFileSync('file1.txt',' how are you guys');
-//const datas=fs.readFileSync('file1.txt');
-//console.log(datas);
-//console.log(datas.toString());
+{//file system
+var fs = require('fs');//core module
+fs.writeFileSync('file1.txt','hi my name is ashak');
+fs.appendFileSync('file1.txt',' how are you guys');
+//async way ty data read
+const datas=fs.readFileSync('file1.txt');
+console.log(datas);
+console.log(datas.toString());
+//sync way ty data read eita better
+fs.readFile("file1.txt",(err,data)=>{
+    console.log(data.toString());
+});
+}
 {//EventEmitter
 var evan = require('events'); //core module
 
@@ -46,4 +53,17 @@ emit.emit("call",{
     person : "asik",
     text:"fazil"
 })
+}
+{//fs all
+fs.write/read
+fs.writeSync
+fs.writeFile
+fs.writeFileSync
+fs.writev
+fs.writeSync
+fs.WriteStream
+fs.createWriteStream
+
+fs.appendFile
+fs.appendFileSync
 }
