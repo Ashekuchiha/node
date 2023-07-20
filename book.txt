@@ -4,20 +4,38 @@ node file.js
 
 window==global
 
+******************************************
 _dirname=path of curent folder
 _filename=path of curent folder with file name
 
+********************************************
 moduel = every singel js file called moduel
 
+*******************************************
 module.export= {};
 require("path");=it use for conecting two moduel
 
+*****************************************
 core module ->path ,os,fs,events
 module
 
-creat stram:
+*************creat stram:**************
 const fs=require("fs");
 const stream=fs.createReadStream(`${__dirname}/fileName.txt`);
 stram.on("eventName",(chunk)=>{
     console.log(chunk);
 })
+
+********************************************
+
+const url = require('url');
+its fot path 
+
+***************************************
+how to create a api server
+project1
+
+
+
+
+
