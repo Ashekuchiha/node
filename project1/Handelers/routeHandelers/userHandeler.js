@@ -2,6 +2,8 @@
 
 const data = require('../../lib/data');
 const {hash}=require('../../helper/utilities');
+const {parseJSON}=require('../../helper/utilities');
+
 
 const handeler = {};
 
@@ -60,9 +62,75 @@ handeler._users.post = (reqPro,callback)=>{
 
 };
 handeler._users.get = (reqPro,callback)=>{
-    callback(200);
+    const phone = typeof(reqPro.querryStringObject.phone) === 'string' && reqPro.querryStringObject.phone.trim().length === 11 ? reqPro.querryStringObject.phone : false;
+
+    if(phone){
+        data.read('users',phone,(error,u)=>{
+            const user = { ...parseJSON(u)};
+            if(!error && user){
+                delete user.password;
+                callback(200,user);
+            }else{
+                callback(404,{
+                    'error':`user not found`
+                });
+            }
+        });
+    }else{
+        callback(404,{
+            'error':`user not found`
+        });
+    }
 };
-handeler._users.put = (reqPro,callback)=>{};
+handeler._users.put = (reqPro,callback)=>{
+    const firstName = typeof(reqPro.body.firstName) === 'string' && reqPro.body.firstName.trim().length > 0 ? reqPro.body.firstName : false;
+    const lastName = typeof(reqPro.body.lastName) === 'string' && reqPro.body.lastName.trim().length > 0 ? reqPro.body.lastName : false;
+    const phone = typeof(reqPro.body.phone) === 'string' && reqPro.body.phone.trim().length === 11 ? reqPro.body.phone : false;
+    const password = typeof(reqPro.body.password) === 'string' && reqPro.body.password.trim().length > 0 ? reqPro.body.password : false;
+
+    if(phone){
+        if(firstName || lastName || password){
+            data.read('users',phone,(error,uData)=>{
+                const userData ={ ...parseJSON(uData)};
+                if(!error && userData){
+                    if(firstName){
+                        userData.firstName = firstName;
+                    }
+                    if(lastName){
+                        userData.lastName = lastName;
+                    }
+                    if(password){
+                        userData.password = hash(password);
+                    }
+                    //store to db
+                    data.update('users',phone,userData,(error)=>{
+                        if(!error){
+                            callback(200,{
+                                'message':`user updated successfully`
+                            })
+                        }else{
+                            callback(500,{
+                                'error' : `there is a problem in a server side`
+                            })
+                        }
+                    });
+                }else{
+                    callback(400,{
+                        'error':'you have problem in your request'
+                    })
+                }
+            });
+        }else{
+        callback(400,{
+            'error':'you have problem in your req phn number'
+        })
+    }
+    }else{
+        callback(400,{
+            'error':'invalid  phone number'
+        })
+    }
+};
 handeler._users.delet = (reqPro,callback)=>{};
 
 

@@ -15,7 +15,7 @@ const app={};
 // } //eitar kaj environment.js dia kora hoisay
 
 
-//data,js check er joono strt
+//{//data,js check er joono strt
 
 //delet uncomment korly bujay korty hobay
 // data.delet('test','newFile',(error)=>{
@@ -43,6 +43,7 @@ const app={};
 //     console.log(`error is`,err);
 // });
 //data,js check er joono end
+//}
 
 
 //create server
