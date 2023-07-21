@@ -1,0 +1,12 @@
+
+
+1.how to create server : file:index.js line:app.createServer
+2.parsing request :: handeling path : file :handelreqress line: handlers.handeleReq
+3.refactor code :: boro code er ekta  boro function onno file e nia jai oita k abar call kora :file : handlers.handeleReq->index,js  line : app.handeleReqress 
+4.routing setup :: url thika call dilay oita nia kon page call korbo oita nia alochona. file :routers.js
+5.using environment variable . file : environment.js
+6.read write update in file eita dia database banano hoi but file ei likha hoi  . file : data.js **impotent** line :12-34 lib.creat();
+
+
+part 3
+7.responsib heading : 
