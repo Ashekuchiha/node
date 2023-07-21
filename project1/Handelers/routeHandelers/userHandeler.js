@@ -9,7 +9,7 @@ const handeler = {};
 
 handeler.userHandeler = (reqPro,callback)=>{
     //console.log(reqPro);
-    const acceptedMethods = ['get','post','put','delet'];
+    const acceptedMethods = ['get','post','put','delete'];
 
     if(acceptedMethods.indexOf(reqPro.method) > -1){
         handeler._users[reqPro.method](reqPro,callback);
@@ -131,7 +131,35 @@ handeler._users.put = (reqPro,callback)=>{
         })
     }
 };
-handeler._users.delet = (reqPro,callback)=>{};
+handeler._users.delete = (reqPro,callback)=>{
+    const phone = typeof(reqPro.querryStringObject.phone) === 'string' && reqPro.querryStringObject.phone.trim().length === 11 ? reqPro.querryStringObject.phone : false;
+
+    if(phone){
+        data.read('users',phone,(error,userdata)=>{
+            if(!error && userdata){
+                data.delete('users',phone,(error)=>{
+                    if(!error){
+                        callback(200,{
+                            'message':`successfully deleted`
+                        });
+                    }else{
+                        callback(500,{
+                            'error':`server site error1`
+                        });
+                    }
+                });
+            }else{
+                callback(500,{
+                    'error':`server sight error2`
+                });
+            }
+        });
+    }else{
+        callback(400,{
+            'error':`problem in your req may be phn number`
+        })
+    }
+};
 
 
 module.exports=handeler;

@@ -74,10 +74,10 @@ lib.update=(dir,file,data,callback)=>{
 }
 
 //delet
-lib.delet = (dir,file,callback)=>{
+lib.delete = (dir,file,callback)=>{
     //unlink kora
     fs.unlink(`${lib.basedir + dir}/${file}.json`,(error)=>{
-        if(!err){
+        if(!error){
             callback(false);
         }else{
             callback(`found a error to delet and the error is ${error}`);

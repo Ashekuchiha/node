@@ -11,3 +11,15 @@
 part 3
 7.responsib heading : 
 8
+
+
+
+
+
+{
+    "firstName":"shakil",
+    "lastName": "ul islam",
+    "phone": "01889177510",
+    "password":"1234",
+    "tosAgreement":true
+}
