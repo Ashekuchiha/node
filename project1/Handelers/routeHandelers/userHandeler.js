@@ -3,6 +3,7 @@
 const data = require('../../lib/data');
 const {hash}=require('../../helper/utilities');
 const {parseJSON}=require('../../helper/utilities');
+const tokenHandeler = require('./tokenHandeler');
 
 
 const handeler = {};
@@ -65,17 +66,28 @@ handeler._users.get = (reqPro,callback)=>{
     const phone = typeof(reqPro.querryStringObject.phone) === 'string' && reqPro.querryStringObject.phone.trim().length === 11 ? reqPro.querryStringObject.phone : false;
 
     if(phone){
-        data.read('users',phone,(error,u)=>{
-            const user = { ...parseJSON(u)};
-            if(!error && user){
-                delete user.password;
-                callback(200,user);
+        let token = typeof(reqPro.headersObj.token) === 'string' ? reqPro.headersObj.token : false;
+
+        tokenHandeler._token.varify(token,phone,(tokenId)=>{
+            if(tokenId){
+                data.read('users',phone,(error,u)=>{
+                    const user = { ...parseJSON(u)};
+                    if(!error && user){
+                        delete user.password;
+                        callback(200,user);
+                    }else{
+                        callback(404,{
+                            'error':`user not found`
+                        });
+                    }
+                });
             }else{
-                callback(404,{
-                    'error':`user not found`
+                callback(403,{
+                    'error':`authentication failed`
                 });
             }
         });
+
     }else{
         callback(404,{
             'error':`user not found`
@@ -90,36 +102,47 @@ handeler._users.put = (reqPro,callback)=>{
 
     if(phone){
         if(firstName || lastName || password){
-            data.read('users',phone,(error,uData)=>{
-                const userData ={ ...parseJSON(uData)};
-                if(!error && userData){
-                    if(firstName){
-                        userData.firstName = firstName;
-                    }
-                    if(lastName){
-                        userData.lastName = lastName;
-                    }
-                    if(password){
-                        userData.password = hash(password);
-                    }
-                    //store to db
-                    data.update('users',phone,userData,(error)=>{
-                        if(!error){
-                            callback(200,{
-                                'message':`user updated successfully`
-                            })
-                        }else{
-                            callback(500,{
-                                'error' : `there is a problem in a server side`
-                            })
+            let token = typeof(reqPro.headersObj.token) === 'string' ? reqPro.headersObj.token : false;
+
+        tokenHandeler._token.varify(token,phone,(tokenId)=>{
+            if(tokenId){
+                data.read('users',phone,(error,uData)=>{
+                    const userData ={ ...parseJSON(uData)};
+                    if(!error && userData){
+                        if(firstName){
+                            userData.firstName = firstName;
                         }
-                    });
-                }else{
-                    callback(400,{
-                        'error':'you have problem in your request'
-                    })
-                }
-            });
+                        if(lastName){
+                            userData.lastName = lastName;
+                        }
+                        if(password){
+                            userData.password = hash(password);
+                        }
+                        //store to db
+                        data.update('users',phone,userData,(error)=>{
+                            if(!error){
+                                callback(200,{
+                                    'message':`user updated successfully`
+                                })
+                            }else{
+                                callback(500,{
+                                    'error' : `there is a problem in a server side`
+                                })
+                            }
+                        });
+                    }else{
+                        callback(400,{
+                            'error':'you have problem in your request'
+                        })
+                    }
+                });
+            }else{
+                callback(403,{
+                    'error':`authentication failed`
+                });
+            }
+        });
+            
         }else{
         callback(400,{
             'error':'you have problem in your req phn number'
@@ -135,25 +158,36 @@ handeler._users.delete = (reqPro,callback)=>{
     const phone = typeof(reqPro.querryStringObject.phone) === 'string' && reqPro.querryStringObject.phone.trim().length === 11 ? reqPro.querryStringObject.phone : false;
 
     if(phone){
-        data.read('users',phone,(error,userdata)=>{
-            if(!error && userdata){
-                data.delete('users',phone,(error)=>{
-                    if(!error){
-                        callback(200,{
-                            'message':`successfully deleted`
+        let token = typeof(reqPro.headersObj.token) === 'string' ? reqPro.headersObj.token : false;
+
+        tokenHandeler._token.varify(token,phone,(tokenId)=>{
+            if(tokenId){
+                data.read('users',phone,(error,userdata)=>{
+                    if(!error && userdata){
+                        data.delete('users',phone,(error)=>{
+                            if(!error){
+                                callback(200,{
+                                    'message':`successfully deleted`
+                                });
+                            }else{
+                                callback(500,{
+                                    'error':`server site error1`
+                                });
+                            }
                         });
                     }else{
                         callback(500,{
-                            'error':`server site error1`
+                            'error':`server sight error2`
                         });
                     }
                 });
             }else{
-                callback(500,{
-                    'error':`server sight error2`
+                callback(403,{
+                    'error':`authentication failed`
                 });
             }
         });
+        
     }else{
         callback(400,{
             'error':`problem in your req may be phn number`

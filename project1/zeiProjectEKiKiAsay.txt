@@ -15,11 +15,41 @@ part 3
 
 
 
-
+creating user:post
 {
     "firstName":"shakil",
     "lastName": "ul islam",
     "phone": "01889177510",
     "password":"1234",
     "tosAgreement":true
+}
+get user: url e ?phone=
+{
+    "phone":"",
+    "password":""
+}
+put user :url e 
+{
+
+}
+delet user : url e 
+{
+
+}
+
+
+creating token(post):
+{
+    "phone":"",
+    "password":""
+}
+get token :url e ?id=token id
+{
+    "phone":"",
+    "password":""
+}
+update token :http://localhost:5000/token
+{
+    "tokenId":"",
+    "extend":true
 }
