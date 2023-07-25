@@ -53,3 +53,6 @@ update token :http://localhost:5000/token
     "tokenId":"",
     "extend":true
 }
+
+
+NODE_ENV=production nodemon index.js
