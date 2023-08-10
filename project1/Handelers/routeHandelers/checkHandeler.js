@@ -200,7 +200,70 @@ handeler._check.put = (reqPro,callback)=>{
 
 };
 handeler._check.delete = (reqPro,callback)=>{
-    
+    const tokenId = typeof(reqPro.querryStringObject.tokenId) === 'string' && reqPro.querryStringObject.tokenId.trim().length === 20 ? reqPro.querryStringObject.tokenId : false;
+
+    if(tokenId){
+        data.read('checks',tokenId,(error,checkdata)=>{
+            if(!error && checkdata){
+                let token = typeof(reqPro.headersObj.token) === 'string' ? reqPro.headersObj.token : false;
+
+                tokenHandeler._token.varify(token,parseJSON(checkdata).userPhone,(tokenIsValid)=>{
+                if(tokenIsValid){
+                    //callback(200,parseJSON(checkdata))
+                    data.delete('checks',tokenId,(error)=>{
+                        if(!error){
+                            data.read('users',parseJSON(checkdata).userPhone,(error,userdata)=>{
+                                let userobj = parseJSON(userdata);
+                                if(!error && userdata){
+                                    let userChecks = typeof(userobj.checks) === 'object' &&  userobj.checks instanceof Array ? userobj.checks : [];
+                                    let checkPosition = userChecks.indexOf(tokenId);
+                                    if(checkPosition > -1){
+                                        userChecks.splice(checkPosition, 1);
+                                        userobj.checks = userChecks;
+                                        data.update('users',userobj.phone,userobj,(error)=>{
+                                            if(!error){
+                                                callback(200);
+                                            }else{
+                                                callback(500,{
+                                                    'error':`there is a server site problem`
+                                                });
+                                            }
+                                        });
+                                    }else{
+                                        callback(500,{
+                                            'error':`check id u are trying to remove not found`
+                                        });
+                                    }
+                                }else{
+                                    callback(500,{
+                                'error':`there is a server site problem`
+                            });
+                                }
+                            });
+                        }else{
+                            callback(500,{
+                                'error':`there is a server site problem`
+                            });
+                        }
+                    });
+                }else{
+                    callback(403,{
+                        'error':`authentication failure`
+                    });
+                }
+                });
+
+            }else{
+                callback(500,{
+                    'error':`you have problem in your req 1`
+                })
+            }
+        });
+    }else{
+        callback(404,{
+            'error':`token not found 2`
+        });
+    }
 };
 
 
